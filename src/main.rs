@@ -25,7 +25,7 @@ fn tcppair() -> (TcpStream, TcpStream) {
         socket::AddressFamily::Unix,
         socket::SockType::Stream,
         None,
-        socket::SockFlag::SOCK_NONBLOCK,
+        socket::SockFlag::empty(),
         ).unwrap();
 
     unsafe {(
@@ -88,7 +88,7 @@ fn wsb(tcp: TcpStream) {
 fn mainloop(tcp: TcpStream) {
     let mut sess = Session::new().unwrap();
     sess.handshake(&tcp).unwrap();
-    sess.userauth_pubkey_file("root", None, Path::new("/home/aep/.ssh/id_rsa"), None);
+    sess.userauth_pubkey_file("root", None, Path::new(env::args().nth(2).unwrap().as_str()), None);
 
     assert!(sess.authenticated());
 
